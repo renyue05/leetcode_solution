@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Console Program</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #console {
+            width: 100%;
+            height: 300px;
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            overflow-y: auto;
+        }
+        #input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <h1>Console Program</h1>
+    <div id="console"></div>
+    <input type="text" id="input" placeholder="Type your command here" autocomplete="off">
+
+    <script>
+        const consoleDiv = document.getElementById('console');
+        const input = document.getElementById('input');
+        
+        const commands = {
+            greet: (name) => `Hello, ${name}!`,
+            age: (age) => {
+                if (isNaN(age)) {
+                    return "Please enter a valid number for age.";
+                } else {
+                    return `You are ${age} years old.`;
+                }
+            },
+            favoriteLanguage: (language) => `Your favorite programming language is ${language}.`,
+            help: () => `Available commands: greet [name], age [age], favoriteLanguage [language]`
+        };
+
+        function appendToConsole(message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.textContent = message;
+            consoleDiv.appendChild(messageDiv);
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        }
+
+        input.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                const value = input.value.trim();
+                appendToConsole(`> ${value}`);
+                
+                const [command, ...args] = value.split(' ');
+
+                if (commands[command]) {
+                    appendToConsole(commands[command](...args));
+                } else {
+                    appendToConsole(`Unknown command: ${command}`);
+                }
+
+                input.value = '';
+            }
+        });
+
+        appendToConsole('Welcome to the Console Program!');
+        appendToConsole(commands.help());
+    </script>
+</body>
+</html>
